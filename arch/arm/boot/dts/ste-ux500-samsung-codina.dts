@@ -9,9 +9,13 @@
  * the boot loader.
  *
  * The Samsung tree further talks about GT-I8160P and GT-I8160chn (China).
- * The GT-I8160 plain is knonw as the "europe" variant.
- * The GT-I8160P appears to not use the ST Microelectronics accelerometer.
+ * The GT-I8160 plain is known as the "europe" variant.
+ * The GT-I8160P is the CDMA version and it appears to not use the ST
+ * Microelectronics accelerometer and reportedly has NFC mounted.
  * The GT-I8160chn appears to be the same as the europe variant.
+ *
+ * There is also the Codina-TMO, Samsung SGH-T599, which has its own device
+ * tree.
  */
 
 /dts-v1/;
