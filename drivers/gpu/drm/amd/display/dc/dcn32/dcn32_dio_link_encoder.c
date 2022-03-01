@@ -33,6 +33,7 @@
 #include "stream_encoder.h"
 #include "i2caux_interface.h"
 #include "dc_bios_types.h"
+#include "link_enc_cfg.h"
 
 #include "gpio_service_interface.h"
 
@@ -125,7 +126,7 @@ bool dcn32_link_encoder_is_in_alt_mode(struct link_encoder *enc)
 
 	if (enc->features.flags.bits.DP_IS_USB_C) {
 		/* if value == 1 alt mode is disabled, otherwise it is enabled */
-		//REG_GET(RDPCSTX_PHY_CNTL6, RDPCS_PHY_DPALT_DISABLE, &dp_alt_mode_disable);
+		REG_GET(RDPCSPIPE_PHY_CNTL6, RDPCS_PHY_DPALT_DISABLE, &dp_alt_mode_disable);
 		is_usb_c_alt_mode = (dp_alt_mode_disable == 0);
 	}
 
@@ -142,13 +143,19 @@ void dcn32_link_encoder_get_max_link_cap(struct link_encoder *enc,
 
 	/* in usb c dp2 mode, max lane count is 2 */
 	if (enc->funcs->is_in_alt_mode && enc->funcs->is_in_alt_mode(enc)) {
-//		REG_GET(RDPCSTX_PHY_CNTL6, RDPCS_PHY_DPALT_DP4, &is_in_usb_c_dp4_mode);
+		REG_GET(RDPCSPIPE_PHY_CNTL6, RDPCS_PHY_DPALT_DP4, &is_in_usb_c_dp4_mode);
 		if (!is_in_usb_c_dp4_mode)
 			link_settings->lane_count = MIN(LANE_COUNT_TWO, link_settings->lane_count);
 	}
 
 }
 
+void enc32_set_dig_output_mode(struct link_encoder *enc, uint8_t pix_per_container)
+{
+	struct dcn10_link_encoder *enc10 = TO_DCN10_LINK_ENC(enc);
+	REG_UPDATE(DIG_FIFO_CTRL0, DIG_FIFO_OUTPUT_PIXEL_MODE, pix_per_container);
+}
+ 
 static const struct link_encoder_funcs dcn32_link_enc_funcs = {
 	.read_state = link_enc2_read_state,
 	.validate_output_with_stream =
@@ -179,6 +186,7 @@ static const struct link_encoder_funcs dcn32_link_enc_funcs = {
 	.is_in_alt_mode = dcn32_link_encoder_is_in_alt_mode,
 	.get_max_link_cap = dcn32_link_encoder_get_max_link_cap,
 	.set_dio_phy_mux = dcn31_link_encoder_set_dio_phy_mux,
+	.set_dig_output_mode = enc32_set_dig_output_mode,
 };
 
 void dcn32_link_encoder_construct(
@@ -202,6 +210,9 @@ void dcn32_link_encoder_construct(
 
 	enc10->base.hpd_source = init_data->hpd_source;
 	enc10->base.connector = init_data->connector;
+
+	if (enc10->base.connector.id == CONNECTOR_ID_USBC)
+		enc10->base.features.flags.bits.DP_IS_USB_C = 1;
 
 	enc10->base.preferred_engine = ENGINE_ID_UNKNOWN;
 
