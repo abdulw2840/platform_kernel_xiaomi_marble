@@ -23,18 +23,29 @@
  */
 #include "priv.h"
 
-void
-gp102_pmu_reset(struct nvkm_pmu *pmu)
-{
-	struct nvkm_device *device = pmu->subdev.device;
-	nvkm_mask(device, 0x10a3c0, 0x00000001, 0x00000001);
-	nvkm_mask(device, 0x10a3c0, 0x00000001, 0x00000000);
-}
+static const struct nvkm_falcon_func
+gp102_pmu_flcn = {
+	.disable = gm200_flcn_disable,
+	.enable = gm200_flcn_enable,
+	.reset_eng = gp102_flcn_reset_eng,
+	.reset_wait_mem_scrubbing = gm200_flcn_reset_wait_mem_scrubbing,
+	.debug = 0xc08,
+	.fbif = 0xe00,
+	.load_imem = nvkm_falcon_v1_load_imem,
+	.load_dmem = nvkm_falcon_v1_load_dmem,
+	.read_dmem = nvkm_falcon_v1_read_dmem,
+	.bind_context = nvkm_falcon_v1_bind_context,
+	.wait_for_halt = nvkm_falcon_v1_wait_for_halt,
+	.clear_interrupt = nvkm_falcon_v1_clear_interrupt,
+	.set_start_addr = nvkm_falcon_v1_set_start_addr,
+	.start = nvkm_falcon_v1_start,
+	.cmdq = { 0x4a0, 0x4b0, 4 },
+	.msgq = { 0x4c8, 0x4cc, 0 },
+};
 
 static const struct nvkm_pmu_func
 gp102_pmu = {
-	.flcn = &gm200_pmu_flcn,
-	.reset = gp102_pmu_reset,
+	.flcn = &gp102_pmu_flcn,
 };
 
 static const struct nvkm_pmu_fwif
