@@ -1,5 +1,4 @@
-/*
- * Copyright 2013-16 Advanced Micro Devices, Inc.
+/* Copyright 2021 Advanced Micro Devices, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -23,19 +22,17 @@
  *
  */
 
-#include "dm_services.h"
-#include "hw_translate_diag.h"
-#include "include/gpio_types.h"
+#ifndef __DCN32_DPP_H__
+#define __DCN32_DPP_H__
 
-#include "../hw_translate.h"
+#include "dcn20/dcn20_dpp.h"
+#include "dcn30/dcn30_dpp.h"
 
-/* function table */
-static const struct hw_translate_funcs funcs = {
-	.offset_to_id = NULL,
-	.id_to_offset = NULL,
-};
+bool dpp32_construct(struct dcn3_dpp *dpp3,
+	struct dc_context *ctx,
+	uint32_t inst,
+	const struct dcn3_dpp_registers *tf_regs,
+	const struct dcn3_dpp_shift *tf_shift,
+	const struct dcn3_dpp_mask *tf_mask);
 
-void dal_hw_translate_diag_fpga_init(struct hw_translate *tr)
-{
-	tr->funcs = &funcs;
-}
+#endif /* __DCN32_DPP_H__ */

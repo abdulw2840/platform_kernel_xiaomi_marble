@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-16 Advanced Micro Devices, Inc.
+ * Copyright 2020 Advanced Micro Devices, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -23,12 +23,20 @@
  *
  */
 
-#ifndef __DAL_HW_FACTORY_DIAG_FPGA_H__
-#define __DAL_HW_FACTORY_DIAG_FPGA_H__
+#ifndef _DCN321_RESOURCE_H_
+#define _DCN321_RESOURCE_H_
 
-struct hw_factory;
+#include "core_types.h"
 
-/* Initialize HW factory function pointers and pin info */
-void dal_hw_factory_diag_fpga_init(struct hw_factory *factory);
+#define TO_DCN321_RES_POOL(pool)\
+	container_of(pool, struct dcn321_resource_pool, base)
 
-#endif /* __DAL_HW_FACTORY_DIAG_FPGA_H__ */
+struct dcn321_resource_pool {
+	struct resource_pool base;
+};
+
+struct resource_pool *dcn321_create_resource_pool(
+		const struct dc_init_data *init_data,
+		struct dc *dc);
+
+#endif /* _DCN321_RESOURCE_H_ */

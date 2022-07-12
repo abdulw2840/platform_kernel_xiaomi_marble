@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-16 Advanced Micro Devices, Inc.
+ * Copyright 2022 Advanced Micro Devices, Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -19,44 +19,10 @@
  * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  *
- * Authors: AMD
- *
  */
+#ifndef __MMHUB_V3_0_1_H__
+#define __MMHUB_V3_0_1_H__
 
-/*
- * Pre-requisites: headers required by header of this unit
- */
+extern const struct amdgpu_mmhub_funcs mmhub_v3_0_1_funcs;
 
-#include "dm_services.h"
-#include "hw_factory_diag.h"
-#include "include/gpio_types.h"
-#include "../hw_factory.h"
-
-/*
- * Header of this unit
- */
-
-#include "../hw_gpio.h"
-#include "../hw_ddc.h"
-#include "../hw_hpd.h"
-#include "../hw_generic.h"
-
-/* function table */
-static const struct hw_factory_funcs funcs = {
-	.init_ddc_data = NULL,
-	.init_generic = NULL,
-	.init_hpd = NULL,
-};
-
-void dal_hw_factory_diag_fpga_init(struct hw_factory *factory)
-{
-	factory->number_of_pins[GPIO_ID_DDC_DATA] = 8;
-	factory->number_of_pins[GPIO_ID_DDC_CLOCK] = 8;
-	factory->number_of_pins[GPIO_ID_GENERIC] = 7;
-	factory->number_of_pins[GPIO_ID_HPD] = 6;
-	factory->number_of_pins[GPIO_ID_GPIO_PAD] = 31;
-	factory->number_of_pins[GPIO_ID_VIP_PAD] = 0;
-	factory->number_of_pins[GPIO_ID_SYNC] = 2;
-	factory->number_of_pins[GPIO_ID_GSL] = 4;
-	factory->funcs = &funcs;
-}
+#endif
