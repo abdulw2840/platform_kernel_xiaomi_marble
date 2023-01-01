@@ -18,18 +18,24 @@
 
 asmlinkage void aria_aesni_avx_encrypt_16way(const void *ctx, u8 *dst,
 					     const u8 *src);
+EXPORT_SYMBOL_GPL(aria_aesni_avx_encrypt_16way);
 asmlinkage void aria_aesni_avx_decrypt_16way(const void *ctx, u8 *dst,
 					     const u8 *src);
+EXPORT_SYMBOL_GPL(aria_aesni_avx_decrypt_16way);
 asmlinkage void aria_aesni_avx_ctr_crypt_16way(const void *ctx, u8 *dst,
 					       const u8 *src,
 					       u8 *keystream, u8 *iv);
+EXPORT_SYMBOL_GPL(aria_aesni_avx_ctr_crypt_16way);
 asmlinkage void aria_aesni_avx_gfni_encrypt_16way(const void *ctx, u8 *dst,
 						  const u8 *src);
+EXPORT_SYMBOL_GPL(aria_aesni_avx_gfni_encrypt_16way);
 asmlinkage void aria_aesni_avx_gfni_decrypt_16way(const void *ctx, u8 *dst,
 						  const u8 *src);
+EXPORT_SYMBOL_GPL(aria_aesni_avx_gfni_decrypt_16way);
 asmlinkage void aria_aesni_avx_gfni_ctr_crypt_16way(const void *ctx, u8 *dst,
 						    const u8 *src,
 						    u8 *keystream, u8 *iv);
+EXPORT_SYMBOL_GPL(aria_aesni_avx_gfni_ctr_crypt_16way);
 
 static struct aria_avx_ops aria_ops;
 
