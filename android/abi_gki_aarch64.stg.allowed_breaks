@@ -135,3 +135,25 @@ type 'struct kvm_hyp_req' changed
     type changed from 'union { struct { u8 dest; int nr_pages; int sz_alloc; } mem; struct { unsigned long guest_ipa; size_t size; } map; }' to 'union { struct { u8 dest; int nr_pages; int sz_alloc; } mem; struct { unsigned long guest_ipa; size_t size; } map; struct { unsigned long guest_ipa; size_t size; } split; }'
       member 'struct { unsigned long guest_ipa; size_t size; } split' was added
 
+type 'struct scm_fp_list' changed
+  byte size changed from 2040 to 2048
+  member 'short count_unix' was added
+
+type 'struct scm_fp_list' changed
+  byte size changed from 2048 to 2064
+  member 'struct list_head vertices' was added
+  member 'short count_unix' changed
+    offset changed by 128
+
+type 'struct scm_fp_list' changed
+  byte size changed from 2064 to 2072
+  member 'struct unix_edge* edges' was added
+  member 'short count_unix' changed
+    offset changed by 64
+
+type 'struct scm_fp_list' changed
+  byte size changed from 2072 to 2080
+  member 'bool inflight' was added
+  3 members ('struct list_head vertices' .. 'short count_unix') changed
+    offset changed by 64
+
