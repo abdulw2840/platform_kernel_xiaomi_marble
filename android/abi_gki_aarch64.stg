@@ -76344,6 +76344,12 @@ member {
   offset: 3200
 }
 member {
+  id: 0x3bde3edb
+  name: "dead"
+  type_id: 0x6d7f5ff6
+  offset: 16328
+}
+member {
   id: 0x6491a5c4
   name: "dead"
   type_id: 0x295c7202
@@ -100464,12 +100470,6 @@ member {
   offset: 128
 }
 member {
-  id: 0x80572460
-  name: "gc_flags"
-  type_id: 0x33756485
-  offset: 8192
-}
-member {
   id: 0x8fd944b0
   name: "gc_interval"
   type_id: 0x6720d32f
@@ -112318,6 +112318,12 @@ member {
   offset: 64
 }
 member {
+  id: 0xad0a7aac
+  name: "index"
+  type_id: 0x33756485
+  offset: 448
+}
+member {
   id: 0xad0a7d70
   name: "index"
   type_id: 0x33756485
@@ -112729,12 +112735,6 @@ member {
   name: "inflight"
   type_id: 0x6d7f5ff6
   offset: 16320
-}
-member {
-  id: 0x79c0c441
-  name: "inflight"
-  type_id: 0x33756485
-  offset: 8064
 }
 member {
   id: 0x79f74293
@@ -123419,12 +123419,6 @@ member {
   offset: 1024
 }
 member {
-  id: 0x556d5327
-  name: "link"
-  type_id: 0xd3c80119
-  offset: 7936
-}
-member {
   id: 0x556d57ec
   name: "link"
   type_id: 0xd3c80119
@@ -124282,6 +124276,12 @@ member {
   offset: 768
 }
 member {
+  id: 0xe2a2a0b6
+  name: "listener"
+  type_id: 0x1d44326e
+  offset: 7936
+}
+member {
   id: 0xe2a2a2d7
   name: "listener"
   type_id: 0x1d44326e
@@ -124948,6 +124948,12 @@ member {
   type_id: 0xf4933b90
 }
 member {
+  id: 0x2d1fe06a
+  name: "lock"
+  type_id: 0xf313e71a
+  offset: 8000
+}
+member {
   id: 0x2d1fe165
   name: "lock"
   type_id: 0xf313e71a
@@ -124958,12 +124964,6 @@ member {
   name: "lock"
   type_id: 0xf313e71a
   offset: 32
-}
-member {
-  id: 0x2d1fe1e3
-  name: "lock"
-  type_id: 0xf313e71a
-  offset: 8128
 }
 member {
   id: 0x2d1fe1f3
@@ -144512,6 +144512,12 @@ member {
   offset: 21760
 }
 member {
+  id: 0xb206d8fd
+  name: "nr_unix_fds"
+  type_id: 0x33756485
+  offset: 64
+}
+member {
   id: 0xfb6f3a99
   name: "nr_user"
   type_id: 0x6720d32f
@@ -148521,10 +148527,10 @@ member {
   offset: 896
 }
 member {
-  id: 0x337b4b40
+  id: 0x337b49fc
   name: "oob_skb"
   type_id: 0x054f691a
-  offset: 9600
+  offset: 9152
 }
 member {
   id: 0x97510416
@@ -150556,10 +150562,10 @@ member {
   offset: 128
 }
 member {
-  id: 0x0fc2a86e
+  id: 0x0fc2a957
   name: "out_degree"
   type_id: 0x33756485
-  offset: 256
+  offset: 384
 }
 member {
   id: 0xbdac191c
@@ -154508,16 +154514,16 @@ member {
   offset: 304
 }
 member {
-  id: 0x6a6786bf
+  id: 0x6a6789c8
   name: "peer_wake"
   type_id: 0x347ff86e
-  offset: 9216
+  offset: 8704
 }
 member {
-  id: 0x337f3f92
+  id: 0x337f3641
   name: "peer_wq"
   type_id: 0x5eee2044
-  offset: 8704
+  offset: 8192
 }
 member {
   id: 0xc29a8766
@@ -180285,6 +180291,18 @@ member {
   offset: 40
 }
 member {
+  id: 0xd741c1b9
+  name: "scc_entry"
+  type_id: 0xd3c80119
+  offset: 256
+}
+member {
+  id: 0x027dfeed
+  name: "scc_index"
+  type_id: 0x33756485
+  offset: 512
+}
+member {
   id: 0x0ac848fc
   name: "scdc"
   type_id: 0xd9f17649
@@ -180547,10 +180565,10 @@ member {
   type_id: 0xc9082b19
 }
 member {
-  id: 0xac8121db
+  id: 0xac812894
   name: "scm_stat"
   type_id: 0xfa80d3fa
-  offset: 9536
+  offset: 9024
 }
 member {
   id: 0xe94f5bce
@@ -190732,6 +190750,12 @@ member {
   name: "stack_depth"
   type_id: 0xc9082b19
   offset: 224
+}
+member {
+  id: 0xc7b7491e
+  name: "stack_entry"
+  type_id: 0xd3c80119
+  offset: 256
 }
 member {
   id: 0x5775af49
@@ -266833,6 +266857,7 @@ struct_union {
     member_id: 0x042a2402
     member_id: 0x5449f846
     member_id: 0x799ec517
+    member_id: 0x3bde3edb
     member_id: 0x7b11d1cc
     member_id: 0x76d74733
     member_id: 0x11d6bda9
@@ -266843,8 +266868,9 @@ struct_union {
   kind: STRUCT
   name: "scm_stat"
   definition {
-    bytesize: 4
+    bytesize: 16
     member_id: 0xc7d661bf
+    member_id: 0xb206d8fd
   }
 }
 struct_union {
@@ -277275,10 +277301,11 @@ struct_union {
   kind: STRUCT
   name: "unix_edge"
   definition {
-    bytesize: 32
+    bytesize: 48
     member_id: 0x5ba539f6
     member_id: 0x132c9198
     member_id: 0x957e8a2d
+    member_id: 0xc7b7491e
   }
 }
 struct_union {
@@ -277286,7 +277313,7 @@ struct_union {
   kind: STRUCT
   name: "unix_sock"
   definition {
-    bytesize: 1216
+    bytesize: 1152
     member_id: 0x82ce9da8
     member_id: 0x24257f11
     member_id: 0x77353e9c
@@ -277294,14 +277321,12 @@ struct_union {
     member_id: 0xd38b8035
     member_id: 0xb794a532
     member_id: 0x5eddc09d
-    member_id: 0x556d5327
-    member_id: 0x79c0c441
-    member_id: 0x2d1fe1e3
-    member_id: 0x80572460
-    member_id: 0x337f3f92
-    member_id: 0x6a6786bf
-    member_id: 0xac8121db
-    member_id: 0x337b4b40
+    member_id: 0xe2a2a0b6
+    member_id: 0x2d1fe06a
+    member_id: 0x337f3641
+    member_id: 0x6a6789c8
+    member_id: 0xac812894
+    member_id: 0x337b49fc
   }
 }
 struct_union {
@@ -277319,10 +277344,13 @@ struct_union {
   kind: STRUCT
   name: "unix_vertex"
   definition {
-    bytesize: 40
+    bytesize: 72
     member_id: 0x76197573
     member_id: 0x4d8789fe
-    member_id: 0x0fc2a86e
+    member_id: 0xd741c1b9
+    member_id: 0x0fc2a957
+    member_id: 0xad0a7aac
+    member_id: 0x027dfeed
   }
 }
 struct_union {
