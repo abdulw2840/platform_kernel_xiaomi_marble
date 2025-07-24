@@ -25,6 +25,7 @@
 #define MAX_SURGE_TIMER_PERIOD_SEC 20
 #define PM_RUNTIME_RESUME_CNT 8
 #define PM_RUNTIME_RESUME_WAIT_US_MIN  5000
+#define MG_BIAS_CURRENT 0xCF
 #define WCD_USBSS_TRIMCODE1_MASK_1 0x1F
 #define WCD_USBSS_TRIMCODE2_MASK_1 0x03
 #define WCD_USBSS_TRIMCODE2_MASK_2 0x7C
@@ -492,6 +493,9 @@ static bool wcd_usbss_is_in_reset_state(void)
 			ret = true;
 		}
 	}
+	/* MG comparator bias current to 1uA */
+	regmap_write(wcd_usbss_ctxt_->regmap, WCD_USBSS_MG1_BIAS, MG_BIAS_CURRENT);
+	regmap_write(wcd_usbss_ctxt_->regmap, WCD_USBSS_MG2_BIAS, MG_BIAS_CURRENT);
 	mutex_unlock(&wcd_usbss_ctxt_->switch_update_lock);
 
 done:
@@ -1835,6 +1839,10 @@ static int wcd_usbss_probe(struct i2c_client *i2c)
 	regmap_update_bits(priv->regmap, WCD_USBSS_DISP_AUXM_THRESH, 0xE0, 0xE0);
 	regmap_update_bits(priv->regmap, WCD_USBSS_MG1_EN, 0x0C, 0x0C);
 	regmap_update_bits(priv->regmap, WCD_USBSS_MG2_EN, 0x0C, 0x0C);
+	/* MG comparator bias current to 1uA */
+	regmap_write(priv->regmap, WCD_USBSS_MG1_BIAS, MG_BIAS_CURRENT);
+	regmap_write(priv->regmap, WCD_USBSS_MG2_BIAS, MG_BIAS_CURRENT);
+
 	/*
 	 * READ WCD_USBSS_EFUSE_REG_13<4:0> write to WCD_USBSS_DC_TRIMCODE_1 <4:0>
 	 * READ WCD_USBSS_EFUSE_REG_14<4:0> write its <1:0>
