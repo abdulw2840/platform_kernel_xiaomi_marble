@@ -277,25 +277,15 @@ struct mthp_stat {
 #ifdef CONFIG_SYSFS
 DECLARE_PER_CPU(struct mthp_stat, mthp_stats);
 
-static inline void mod_mthp_stat(int order, enum mthp_stat_item item, int delta)
+static inline void count_mthp_stat(int order, enum mthp_stat_item item)
 {
 	if (order <= 0 || order > PMD_ORDER)
 		return;
 
-	this_cpu_add(mthp_stats.stats[order][item], delta);
+	this_cpu_inc(mthp_stats.stats[order][item]);
 }
-
-static inline void count_mthp_stat(int order, enum mthp_stat_item item)
-{
-	mod_mthp_stat(order, item, 1);
-}
-
 unsigned long sum_mthp_stat(int order, enum mthp_stat_item item);
 #else
-static inline void mod_mthp_stat(int order, enum mthp_stat_item item, int delta)
-{
-}
-
 static inline void count_mthp_stat(int order, enum mthp_stat_item item)
 {
 }
@@ -336,7 +326,7 @@ static inline int split_huge_page(struct page *page)
 {
 	return split_huge_page_to_list(page, NULL);
 }
-void deferred_split_folio(struct folio *folio, bool partially_mapped);
+void deferred_split_folio(struct folio *folio);
 
 void __split_huge_pmd(struct vm_area_struct *vma, pmd_t *pmd,
 		unsigned long address, bool freeze, struct folio *folio);
@@ -496,7 +486,7 @@ static inline int split_huge_page(struct page *page)
 {
 	return 0;
 }
-static inline void deferred_split_folio(struct folio *folio, bool partially_mapped) {}
+static inline void deferred_split_folio(struct folio *folio) {}
 #define split_huge_pmd(__vma, __pmd, __address)	\
 	do { } while (0)
 

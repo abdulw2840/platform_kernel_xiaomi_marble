@@ -6523,14 +6523,9 @@ static void ufshcd_err_handler(struct work_struct *work)
 		up(&hba->host_sem);
 		return;
 	}
-	spin_unlock_irqrestore(hba->host->host_lock, flags);
-
-	ufshcd_err_handling_prepare(hba);
-
-	spin_lock_irqsave(hba->host->host_lock, flags);
 	ufshcd_set_eh_in_progress(hba);
 	spin_unlock_irqrestore(hba->host->host_lock, flags);
-
+	ufshcd_err_handling_prepare(hba);
 	/* Complete requests that have door-bell cleared by h/w */
 	ufshcd_complete_requests(hba, false);
 	spin_lock_irqsave(hba->host->host_lock, flags);
@@ -6983,11 +6978,6 @@ static irqreturn_t ufshcd_intr(int irq, void *__hba)
 		ufshcd_writel(hba, intr_status, REG_INTERRUPT_STATUS);
 		if (enabled_intr_status)
 			retval |= ufshcd_sl_intr(hba, enabled_intr_status);
-
-		if (hba->android_quirks &
-			    UFSHCD_ANDROID_QUIRK_NO_IS_READ_ON_H8 &&
-		    intr_status & UIC_HIBERNATE_ENTER)
-			break;
 
 		intr_status = ufshcd_readl(hba, REG_INTERRUPT_STATUS);
 	}
