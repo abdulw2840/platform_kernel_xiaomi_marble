@@ -257,7 +257,12 @@ cpumask_t last_available_big_cpus = CPU_MASK_NONE;
 int have_heavy_list;
 u32 total_util;
 u32 least_pipeline_demand;
-#define REARRANGE_HYST_MS	100ULL
+#define REARRANGE_HYST_MS		100ULL
+#define DEFAULT_PENALTY			10
+#define DEFAULT_BONUS			5
+#define LST_LOW_DEMAND_PENALTY		5
+#define MAX_ACTIVITY_CNT		250
+#define LST_PIPELINE_SKIP_THRESHOLD	25
 bool find_heaviest_topapp(u64 window_start)
 {
 	struct walt_related_thread_group *grp;
@@ -338,8 +343,14 @@ bool find_heaviest_topapp(u64 window_start)
 
 		atomic_set(&to_be_placed_wts->event_windows, 0);
 
-		to_be_placed_wts->pipeline_activity_cnt =
-					max(to_be_placed_wts->pipeline_activity_cnt - 1, 0);
+		/*
+		 * Apply a penalty of DEFAULT_PENALTY to "to_be_placed_wts", assuming it won't
+		 * be selected as a pipeline task.
+		 * If it is later selected as a pipeline task, this penalty will be removed.
+		 */
+		if (to_be_placed_wts->pipeline_cpu == -1)
+			to_be_placed_wts->pipeline_activity_cnt =
+				max(to_be_placed_wts->pipeline_activity_cnt - DEFAULT_PENALTY, 0);
 
 		/*
 		 * Penalty is applied on the tasks which have less demand and were active for
@@ -348,7 +359,8 @@ bool find_heaviest_topapp(u64 window_start)
 		if ((pipeline_demand(to_be_placed_wts) < min_demand_for_activity_cnt) &&
 			(win_cnt < 4)) {
 			to_be_placed_wts->pipeline_activity_cnt =
-					max(to_be_placed_wts->pipeline_activity_cnt - 10, 0);
+					max(to_be_placed_wts->pipeline_activity_cnt -
+									DEFAULT_PENALTY, 0);
 
 			if (to_be_placed_wts->pipeline_cpu == -1)
 				continue;
@@ -363,18 +375,20 @@ bool find_heaviest_topapp(u64 window_start)
 		 * window count is added to improve it's pipeline selection chances.
 		 *
 		 * If task is small in demand than the least heavy pipeline tasks then
-		 * apply penalty of 5.
+		 * apply penalty of LST_LOW_DEMAND_PENALTY.
 		 *
-		 * If task is marked as LST add 10 more to penalty.
+		 * If task is marked as LST add LST_LOW_DEMAND_PENALTY more to penalty.
 		 */
 		delta = pipeline_demand(to_be_placed_wts) - least_pipeline_demand;
-		if (delta >= 0)
-			to_be_placed_wts->pipeline_activity_cnt += win_cnt;
-		else
-			penalty = 5;
+		if (delta >= 0) {
+			if (pipeline_demand(to_be_placed_wts) >= min_demand_for_activity_cnt)
+				to_be_placed_wts->pipeline_activity_cnt += win_cnt;
+		} else {
+			penalty += LST_LOW_DEMAND_PENALTY;
+		}
 
 		if (to_be_placed_wts->lst)
-			penalty += 10;
+			penalty += LST_LOW_DEMAND_PENALTY;
 
 		to_be_placed_wts->pipeline_activity_cnt =
 				max(to_be_placed_wts->pipeline_activity_cnt - penalty, 0);
@@ -383,13 +397,14 @@ bool find_heaviest_topapp(u64 window_start)
 		 * Ignore any LST task with either small pipeline count or task is not
 		 * a pipeline task.
 		 */
-		if (to_be_placed_wts->lst && ((to_be_placed_wts->pipeline_activity_cnt < 50) ||
-							(to_be_placed_wts->pipeline_cpu == -1)))
+		if (to_be_placed_wts->lst &&
+		    ((to_be_placed_wts->pipeline_activity_cnt < LST_PIPELINE_SKIP_THRESHOLD) ||
+			(to_be_placed_wts->pipeline_cpu == -1)))
 			continue;
 
-		/* saturate pipeline count to 250 so that we have deterministic decay */
-		if (to_be_placed_wts->pipeline_activity_cnt > 250)
-			to_be_placed_wts->pipeline_activity_cnt = 250;
+		/* saturate pipeline count so that we have deterministic decay */
+		if (to_be_placed_wts->pipeline_activity_cnt > MAX_ACTIVITY_CNT)
+			to_be_placed_wts->pipeline_activity_cnt = MAX_ACTIVITY_CNT;
 
 		/* skip user defined task as it's already part of the list */
 		if (pipeline_special_task && (to_be_placed_wts == heavy_wts[0]))
@@ -470,6 +485,9 @@ bool find_heaviest_topapp(u64 window_start)
 		if (reset) {
 			heavy_wts_to_drop[i]->low_latency &= ~WALT_LOW_LATENCY_HEAVY_BIT;
 			heavy_wts_to_drop[i]->pipeline_cpu = -1;
+			heavy_wts_to_drop[i]->pipeline_activity_cnt =
+				max(heavy_wts_to_drop[i]->pipeline_activity_cnt -
+									DEFAULT_PENALTY, 0);
 		}
 
 	}
@@ -490,7 +508,7 @@ bool find_heaviest_topapp(u64 window_start)
 
 			/* pipeline selection count is only applied if task is big enough */
 			if (demand > min_demand_for_activity_cnt)
-				heavy_wts[i]->pipeline_activity_cnt += 3;
+				heavy_wts[i]->pipeline_activity_cnt += DEFAULT_BONUS;
 
 			/*
 			 * least_pipeline_demand: tracks smallest pipeline task, this is used
