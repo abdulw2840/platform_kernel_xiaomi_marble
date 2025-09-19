@@ -8934,6 +8934,11 @@ pointer_reference {
   pointee_type_id: 0x61859821
 }
 pointer_reference {
+  id: 0x12f234f7
+  kind: POINTER
+  pointee_type_id: 0x61883543
+}
+pointer_reference {
   id: 0x13012dce
   kind: POINTER
   pointee_type_id: 0x664451a4
@@ -43470,6 +43475,11 @@ member {
   offset: 768
 }
 member {
+  id: 0x355c1a4d
+  type_id: 0x5a5e007a
+  offset: 28608
+}
+member {
   id: 0x355c619d
   type_id: 0x5a5fd068
   offset: 96
@@ -43554,6 +43564,11 @@ member {
   id: 0x364b4150
   type_id: 0x56037e9c
   offset: 1408
+}
+member {
+  id: 0x366394f0
+  type_id: 0x56a024aa
+  offset: 1920
 }
 member {
   id: 0x36707abc
@@ -50465,12 +50480,6 @@ member {
   name: "android_kabi_reserved1"
   type_id: 0x92233392
   offset: 1280
-}
-member {
-  id: 0x2d081365
-  name: "android_kabi_reserved1"
-  type_id: 0x92233392
-  offset: 28608
 }
 member {
   id: 0x2d081368
@@ -83272,10 +83281,27 @@ member {
   offset: 768
 }
 member {
+  id: 0x082d878d
+  name: "dmabuf_count"
+  type_id: 0x4585663f
+  offset: 320
+}
+member {
+  id: 0x32b44094
+  name: "dmabuf_info"
+  type_id: 0x12f234f7
+}
+member {
   id: 0x810e204c
   name: "dmabufs"
   type_id: 0xeb923a9b
   offset: 384
+}
+member {
+  id: 0x8136732c
+  name: "dmabufs"
+  type_id: 0xd3c80119
+  offset: 192
 }
 member {
   id: 0x065bb89a
@@ -144618,6 +144644,11 @@ member {
   offset: 1056
 }
 member {
+  id: 0x014cd3d7
+  name: "nr_task_refs"
+  type_id: 0x1f4573ef
+}
+member {
   id: 0xe321d910
   name: "nr_tasks"
   type_id: 0x6720d32f
@@ -169665,6 +169696,12 @@ member {
   type_id: 0x1f4573ef
 }
 member {
+  id: 0xb7dcf16e
+  name: "refcnt"
+  type_id: 0xa722c13e
+  offset: 128
+}
+member {
   id: 0xb7dcf1d9
   name: "refcnt"
   type_id: 0xa722c13e
@@ -176645,6 +176682,11 @@ member {
   offset: 160
 }
 member {
+  id: 0x10789eb1
+  name: "rss"
+  type_id: 0x33756485
+}
+member {
   id: 0x10ad0965
   name: "rss"
   type_id: 0xe6e2b0f1
@@ -176659,6 +176701,12 @@ member {
   id: 0xf6190409
   name: "rss_context"
   type_id: 0xe62ebf07
+}
+member {
+  id: 0x027688eb
+  name: "rss_hwm"
+  type_id: 0x33756485
+  offset: 64
 }
 member {
   id: 0x9625f4bd
@@ -225949,6 +225997,16 @@ struct_union {
   }
 }
 struct_union {
+  id: 0x56a024aa
+  kind: UNION
+  definition {
+    bytesize: 8
+    member_id: 0x014cd3d7
+    member_id: 0x27000c61
+    member_id: 0x36752b74
+  }
+}
+struct_union {
   id: 0x56efb9c6
   kind: UNION
   definition {
@@ -226070,6 +226128,16 @@ struct_union {
     bytesize: 8
     member_id: 0x32c16e78
     member_id: 0x2ef635de
+    member_id: 0x36752b74
+  }
+}
+struct_union {
+  id: 0x5a5e007a
+  kind: UNION
+  definition {
+    bytesize: 8
+    member_id: 0x32b44094
+    member_id: 0x27000c61
     member_id: 0x36752b74
   }
 }
@@ -237284,7 +237352,7 @@ struct_union {
     member_id: 0xb265164c
     member_id: 0xaf33fcbc
     member_id: 0x5f2a8271
-    member_id: 0x2d0814ec
+    member_id: 0x366394f0
     member_id: 0x63760b26
   }
 }
@@ -273299,6 +273367,20 @@ struct_union {
   }
 }
 struct_union {
+  id: 0x61883543
+  kind: STRUCT
+  name: "task_dma_buf_info"
+  definition {
+    bytesize: 48
+    member_id: 0x10789eb1
+    member_id: 0x027688eb
+    member_id: 0xb7dcf16e
+    member_id: 0x2d1fe165
+    member_id: 0x8136732c
+    member_id: 0x082d878d
+  }
+}
+struct_union {
   id: 0x84d533ac
   kind: STRUCT
   name: "task_group"
@@ -273557,7 +273639,7 @@ struct_union {
     member_id: 0xedf50eb4
     member_id: 0xd666c042
     member_id: 0x9a3ad2fc
-    member_id: 0x2d081365
+    member_id: 0x355c1a4d
     member_id: 0x63760904
     member_id: 0xac894e01
     member_id: 0xe0f6361e
@@ -323046,6 +323128,13 @@ function {
   parameter_id: 0x1bf16028
 }
 function {
+  id: 0x6f9910f4
+  return_type_id: 0x1d44326e
+  parameter_id: 0x0ca27481
+  parameter_id: 0x3e6396e0
+  parameter_id: 0x3399c453
+}
+function {
   id: 0x6f9cf068
   return_type_id: 0x1d44326e
   parameter_id: 0x0ca27481
@@ -341224,6 +341313,13 @@ function {
   parameter_id: 0x351641b0
   parameter_id: 0x92233392
   parameter_id: 0x92233392
+}
+function {
+  id: 0x9b93638b
+  return_type_id: 0x6720d32f
+  parameter_id: 0x18bd6530
+  parameter_id: 0x0dd653d2
+  parameter_id: 0x2e029f76
 }
 function {
   id: 0x9b938987
@@ -362172,6 +362268,15 @@ elf_symbol {
   full_name: "__traceiter_android_vh_check_uninterruptible_tasks_dn"
 }
 elf_symbol {
+  id: 0x253229ea
+  name: "__traceiter_android_vh_chk_task"
+  is_defined: true
+  symbol_type: FUNCTION
+  crc: 0xa543dc37
+  type_id: 0x9b93638b
+  full_name: "__traceiter_android_vh_chk_task"
+}
+elf_symbol {
   id: 0xef7737f8
   name: "__traceiter_android_vh_cleanup_old_buffers_bypass"
   is_defined: true
@@ -364564,6 +364669,15 @@ elf_symbol {
   crc: 0x009eb05f
   type_id: 0x9b49a977
   full_name: "__traceiter_android_vh_ptype_head"
+}
+elf_symbol {
+  id: 0x1adac14e
+  name: "__traceiter_android_vh_put_task"
+  is_defined: true
+  symbol_type: FUNCTION
+  crc: 0x591f8208
+  type_id: 0x9bdbdcc4
+  full_name: "__traceiter_android_vh_put_task"
 }
 elf_symbol {
   id: 0x2c963d28
@@ -369372,6 +369486,15 @@ elf_symbol {
   full_name: "__tracepoint_android_vh_check_uninterruptible_tasks_dn"
 }
 elf_symbol {
+  id: 0xc974433c
+  name: "__tracepoint_android_vh_chk_task"
+  is_defined: true
+  symbol_type: OBJECT
+  crc: 0x32ced20a
+  type_id: 0x18ccbd2c
+  full_name: "__tracepoint_android_vh_chk_task"
+}
+elf_symbol {
   id: 0xca10f06e
   name: "__tracepoint_android_vh_cleanup_old_buffers_bypass"
   is_defined: true
@@ -371764,6 +371887,15 @@ elf_symbol {
   crc: 0x44c9a532
   type_id: 0x18ccbd2c
   full_name: "__tracepoint_android_vh_ptype_head"
+}
+elf_symbol {
+  id: 0x74120954
+  name: "__tracepoint_android_vh_put_task"
+  is_defined: true
+  symbol_type: OBJECT
+  crc: 0xd1ab6463
+  type_id: 0x18ccbd2c
+  full_name: "__tracepoint_android_vh_put_task"
 }
 elf_symbol {
   id: 0xf04b1c62
@@ -407707,6 +407839,24 @@ elf_symbol {
   full_name: "nf_register_net_hooks"
 }
 elf_symbol {
+  id: 0x7d136425
+  name: "nf_sk_lookup_slow_v4"
+  is_defined: true
+  symbol_type: FUNCTION
+  crc: 0xd62cd0ac
+  type_id: 0x6f9910f4
+  full_name: "nf_sk_lookup_slow_v4"
+}
+elf_symbol {
+  id: 0xfe90bb40
+  name: "nf_sk_lookup_slow_v6"
+  is_defined: true
+  symbol_type: FUNCTION
+  crc: 0x514b71c5
+  type_id: 0x6f9910f4
+  full_name: "nf_sk_lookup_slow_v6"
+}
+elf_symbol {
   id: 0x840dad92
   name: "nf_unregister_net_hook"
   is_defined: true
@@ -437177,6 +437327,15 @@ elf_symbol {
   full_name: "zlib_inflate"
 }
 elf_symbol {
+  id: 0x84c3c252
+  name: "zlib_inflateEnd"
+  is_defined: true
+  symbol_type: FUNCTION
+  crc: 0x107e5878
+  type_id: 0x814b86be
+  full_name: "zlib_inflateEnd"
+}
+elf_symbol {
   id: 0xf6eda681
   name: "zlib_inflateIncomp"
   is_defined: true
@@ -438060,6 +438219,7 @@ interface {
   symbol_id: 0xeebf3d23
   symbol_id: 0xa2224fa6
   symbol_id: 0xd37cc550
+  symbol_id: 0x253229ea
   symbol_id: 0xef7737f8
   symbol_id: 0xe50d4e50
   symbol_id: 0xaed0a325
@@ -438326,6 +438486,7 @@ interface {
   symbol_id: 0xf2c39651
   symbol_id: 0x3c69cece
   symbol_id: 0x93303c51
+  symbol_id: 0x1adac14e
   symbol_id: 0x2c963d28
   symbol_id: 0x3a545b61
   symbol_id: 0x96662dde
@@ -438860,6 +439021,7 @@ interface {
   symbol_id: 0x22653fb1
   symbol_id: 0x2cf5984c
   symbol_id: 0x62b6878e
+  symbol_id: 0xc974433c
   symbol_id: 0xca10f06e
   symbol_id: 0xe8cdcd02
   symbol_id: 0xbbfbc9db
@@ -439126,6 +439288,7 @@ interface {
   symbol_id: 0x0e92ee53
   symbol_id: 0xe7b3cb34
   symbol_id: 0xb0c197a3
+  symbol_id: 0x74120954
   symbol_id: 0xf04b1c62
   symbol_id: 0x811d5fab
   symbol_id: 0x2d9a331c
@@ -443111,6 +443274,8 @@ interface {
   symbol_id: 0x82e37620
   symbol_id: 0x8b1dfb41
   symbol_id: 0x43078d96
+  symbol_id: 0x7d136425
+  symbol_id: 0xfe90bb40
   symbol_id: 0x840dad92
   symbol_id: 0x619db28f
   symbol_id: 0x6aeef72a
@@ -446383,6 +446548,7 @@ interface {
   symbol_id: 0xf158bd25
   symbol_id: 0xee403ebb
   symbol_id: 0x52ed8956
+  symbol_id: 0x84c3c252
   symbol_id: 0xf6eda681
   symbol_id: 0xd7745fba
   symbol_id: 0xd9789392
