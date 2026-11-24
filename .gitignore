@@ -96,6 +96,8 @@ modules.order
 !.gitattributes
 !.gitignore
 !.mailmap
+!.github
+!.github/**
 
 #
 # Generated include files

@@ -1,0 +1,78 @@
+name: Build EvolutionX Marble Kernel
+
+on:
+  push:
+    branches: [ evox-ksun ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Kernel (Full LTO)
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout Kernel Source
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 1
+
+      - name: Install Build Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git cpio tar xz-utils bc bison flex libelf-dev libssl-dev python3 libncurses5-dev gcc-aarch64-linux-gnu binutils-aarch64-linux-gnu zip
+
+      - name: Download AOSP Clang (r487747c)
+        run: |
+          mkdir -p clang
+          curl -sL https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/android14-release/clang-r487747c.tar.gz | tar -xzC clang
+
+      - name: Configure Kernel
+        run: |
+          export PATH="$GITHUB_WORKSPACE/clang/bin:$PATH"
+          make ARCH=arm64 LLVM=1 LLVM_IAS=1 CC=clang CROSS_COMPILE=aarch64-linux-gnu- gki_defconfig
+          scripts/kconfig/merge_config.sh -m -O . .config \
+            arch/arm64/configs/vendor/waipio_GKI.config \
+            arch/arm64/configs/vendor/marble_GKI.config \
+            arch/arm64/configs/vendor/debugfs.config \
+            arch/arm64/configs/vendor/extra.config
+          make ARCH=arm64 LLVM=1 LLVM_IAS=1 CC=clang CROSS_COMPILE=aarch64-linux-gnu- olddefconfig
+
+      - name: Compile Kernel Image with Full LTO
+        run: |
+          export PATH="$GITHUB_WORKSPACE/clang/bin:$PATH"
+          make -j$(nproc --all) ARCH=arm64 LLVM=1 LLVM_IAS=1 CC=clang CROSS_COMPILE=aarch64-linux-gnu- KCFLAGS="-Wno-error" Image
+
+      - name: Package with AnyKernel3
+        run: |
+          git clone https://github.com/osm0sis/AnyKernel3 --depth=1 ak3
+          cp arch/arm64/boot/Image ak3/Image
+          cp scripts/anykernel/anykernel.sh ak3/anykernel.sh
+          cd ak3
+          zip -r9 ../EvoShinomiya-KernelSU-Next-Marble.zip * -x .git .github README.md *placeholder
+          cd ..
+
+      - name: Upload Kernel Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: EvoShinomiya-KernelSU-Next-Marble
+          path: EvoShinomiya-KernelSU-Next-Marble.zip
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/heads/')
+        with:
+          tag_name: kernel-${{ github.run_id }}
+          name: EvolutionX Marble Kernel (Full LTO + Insmod Unlocked)
+          body: |
+            ### EvolutionX Marble Kernel Build
+            - **Target Device**: Xiaomi POCO F5 / Redmi Note 12 Turbo (`marble` / `marblein`)
+            - **ROM**: EvolutionX Android 17
+            - **Kernel Version**: 5.10.269-[Evo]Shinomiya
+            - **LTO**: CONFIG_LTO_CLANG_FULL=y (Official ROM match)
+            - **KernelSU-Next**: v3.4.2
+            - **Custom Modules**: Unlocked arbitrary `.ko` loading with `insmod` (CRC, vermagic, and GKI namespaces bypassed).
+          files: EvoShinomiya-KernelSU-Next-Marble.zip
